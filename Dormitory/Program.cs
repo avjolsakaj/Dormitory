@@ -6,6 +6,39 @@ internal class Program
 {
     static void Main (string[] args)
     {
+        while (true)
+        {
+            Console.WriteLine("New announcement (AA)");
+            Console.WriteLine("Edit announcement (EA)");
+            Console.WriteLine("New Application (AAPP)");
+            Console.WriteLine("Exit (Esc)");
+
+            Console.WriteLine("Enter your choice:");
+            var choice = Console.ReadLine();
+
+            switch (choice?.ToUpper())
+            {
+                case "AA":
+                    AddAnnouncemnt();
+                    break;
+                case "EA":
+                    //TerminateAnnouncemnt();
+                    break;
+                case "AAPP":
+                    //NewApplication();
+                    break;
+                case "ESC":
+                    Console.WriteLine("Bye Bye");
+                    return;
+                default:
+                    Console.WriteLine("Choice is not valid.");
+                    break;
+            }
+        }
+    }
+
+    private static void AddAnnouncemnt ()
+    {
         using var context = new FindRooMateContext();
 
         Console.WriteLine("Enter announcement title:");
