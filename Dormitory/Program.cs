@@ -22,7 +22,7 @@ internal class Program
                     AnnouncementManagement.AddAnnouncemnt();
                     break;
                 case "EA":
-                    //TerminateAnnouncemnt();
+                    AnnouncementManagement.TerminateAnnouncemnt();
                     break;
                 case "AAPP":
                     //NewApplication();
