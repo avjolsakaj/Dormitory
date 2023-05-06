@@ -78,4 +78,24 @@ public class ApplicationManagement
         // Save changes
         _ = context.SaveChanges();
     }
+
+    public static void ApproveApplication ()
+    {
+        // TODO: Implement this method
+
+        // TODO: Get all active applications
+        // TODO: Show all applications to user
+
+        // TODO: Get application Id
+        // TODO: Check if application exists
+
+        // TODO: Get student id from application
+        // TODO: Get room id from application
+        // TODO: Add to RoomStudent
+
+        // TODO: Set other application, for this room, to inactive
+        // TOD: Set this announcement to inactive
+
+        // TODO: Save changes
+    }
 }

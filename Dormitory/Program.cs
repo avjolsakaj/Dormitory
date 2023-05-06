@@ -10,7 +10,8 @@ internal class Program
         {
             Console.WriteLine("New announcement (AA)");
             Console.WriteLine("Edit announcement (EA)");
-            Console.WriteLine("New Application (AAPP)");
+            Console.WriteLine("New Application (ADAPP)");
+            Console.WriteLine("New Application (APAPP)");
             Console.WriteLine("Exit (Esc)");
 
             Console.WriteLine("Enter your choice:");
@@ -24,8 +25,11 @@ internal class Program
                 case "EA":
                     AnnouncementManagement.TerminateAnnouncemnt();
                     break;
-                case "AAPP":
+                case "ADAPP":
                     ApplicationManagement.AddApplication();
+                    break;
+                case "APAPP":
+                    ApplicationManagement.ApproveApplication();
                     break;
                 case "ESC":
                     Console.WriteLine("Bye Bye");
