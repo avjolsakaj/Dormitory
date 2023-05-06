@@ -25,7 +25,7 @@ internal class Program
                     AnnouncementManagement.TerminateAnnouncemnt();
                     break;
                 case "AAPP":
-                    //NewApplication();
+                    ApplicationManagement.AddApplication();
                     break;
                 case "ESC":
                     Console.WriteLine("Bye Bye");
