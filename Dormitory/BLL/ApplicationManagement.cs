@@ -33,7 +33,6 @@ public class ApplicationManagement
         if (!announcementExists)
         {
             Console.WriteLine($"Announcement {announcementId}, does not exist!");
-            _ = Console.ReadLine();
             return;
         }
 
@@ -57,7 +56,16 @@ public class ApplicationManagement
         if (!studentExists)
         {
             Console.WriteLine($"Student {studentId}, does not exist!");
-            _ = Console.ReadLine();
+            return;
+        }
+
+        // Check if student has other active applications for this announcement
+        var applicationExists = context.Applications
+            .Any(x => x.AnnouncementId == announcementId && x.StudentId == studentId && x.IsActive == true);
+
+        if (applicationExists)
+        {
+            Console.WriteLine($"Student {studentId}, already has an active application for announcement {announcementId}!");
             return;
         }
 
@@ -81,21 +89,74 @@ public class ApplicationManagement
 
     public static void ApproveApplication ()
     {
-        // TODO: Implement this method
+        using var context = new FindRooMateContext();
 
-        // TODO: Get all active applications
-        // TODO: Show all applications to user
+        // Get all active applications
+        var applications = context.Applications
+            .Include(x => x.Announcement)
+                .ThenInclude(x => x.Room)
+            .Include(x => x.Student)
+            .Where(x => x.IsActive == true)
+            .ToList();
 
-        // TODO: Get application Id
-        // TODO: Check if application exists
+        // Show all applications to user
+        Console.WriteLine("List of applications:");
+        foreach (var application in applications)
+        {
+            Console.WriteLine($"Id: {application.Id}, Announcement: {application.Announcement.Title}, " +
+                               $"Student Id: {application.StudentId}, Student: {application.Student.Name} {application.Student.Surname}, " +
+                               $"Room Id: {application.Announcement.RoomId}, Room Name: {application.Announcement.Room.Name}");
+        }
 
-        // TODO: Get student id from application
-        // TODO: Get room id from application
-        // TODO: Add to RoomStudent
+        // Get application Id
+        Console.WriteLine("Give me application Id:");
+        _ = int.TryParse(Console.ReadLine(), out var applicationId);
 
-        // TODO: Set other application, for this room, to inactive
-        // TOD: Set this announcement to inactive
+        // Check if application exists
+        var applicationToApprove = applications.FirstOrDefault(application => application.Id == applicationId);
 
-        // TODO: Save changes
+        if (applicationToApprove == null)
+        {
+            Console.WriteLine($"Application {applicationId}, does not exist!");
+            return;
+        }
+
+        // Get student id from application
+        var studentId = applicationToApprove.StudentId;
+
+        // Get room id from application
+        var roomId = applicationToApprove.Announcement.RoomId;
+
+        // Add to RoomStudent
+        _ = context.RoomStudents.Add(new RoomStudent
+        {
+            RoomId = roomId,
+            StudentId = studentId,
+            StartDate = DateTime.Now
+        });
+
+        // Show message to user that application is approved
+        Console.WriteLine($"Application {applicationId} is approved. And Student {studentId}, is in Room {roomId}");
+
+        // Get all active applications for this announcement
+        var appActiveApplicationsForAnnouncemnt = context.Applications
+            .Where(x => x.IsActive == true && x.AnnouncementId == applicationToApprove.AnnouncementId)
+            .ToList();
+
+        // Set other application, for this room, to inactive
+        foreach (var otherApp in appActiveApplicationsForAnnouncemnt)
+        {
+            // Make application inactive
+            otherApp.IsActive = false;
+        }
+
+        // The other implementation for the above foreach
+        // appActiveApplicationsForAnnouncemnt.ForEach(x => x.IsActive = false);
+
+        // Set this announcement to inactive
+        applicationToApprove.Announcement.IsActive = false;
+
+        // Save changes
+        _ = context.SaveChanges();
     }
 }
