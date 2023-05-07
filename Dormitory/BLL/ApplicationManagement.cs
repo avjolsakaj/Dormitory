@@ -127,6 +127,20 @@ public class ApplicationManagement
         // Get room id from application
         var roomId = applicationToApprove.Announcement.RoomId;
 
+        // Check if max number of students is reached for this room
+        var countNumberOfStudentsPerRoom = context.RoomStudents.Count(x =>
+            x.RoomId == applicationToApprove.Announcement.RoomId && x.EndDate != null);
+        // && (x.EndDate != null || x.EndDate > DateTime.Now.AddDays(1)));
+
+        // Get max number of students for this room
+        var maxCapacity = applicationToApprove.Announcement.Room.Capacity;
+
+        if (countNumberOfStudentsPerRoom >= maxCapacity)
+        {
+            Console.WriteLine("This room can not accept more students!");
+            return;
+        }
+
         // Add to RoomStudent
         _ = context.RoomStudents.Add(new RoomStudent
         {
