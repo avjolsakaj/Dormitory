@@ -9,6 +9,7 @@ internal class Program
         while (true)
         {
             Console.WriteLine("New announcement (AA)");
+            Console.WriteLine("Terminate announcement (TA)");
             Console.WriteLine("Edit announcement (EA)");
             Console.WriteLine("New Application (ADAPP)");
             Console.WriteLine("New Application (APAPP)");
@@ -20,10 +21,13 @@ internal class Program
             switch (choice?.ToUpper())
             {
                 case "AA":
-                    AnnouncementManagement.AddAnnouncemnt();
+                    AnnouncementManagement.AddAnnouncement();
+                    break;
+                case "TA":
+                    AnnouncementManagement.TerminateAnnouncement();
                     break;
                 case "EA":
-                    AnnouncementManagement.TerminateAnnouncemnt();
+                    AnnouncementManagement.EditAnnouncement();
                     break;
                 case "ADAPP":
                     ApplicationManagement.AddApplication();

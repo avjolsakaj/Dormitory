@@ -5,7 +5,7 @@ namespace Dormitory.BLL;
 // AnnouncementService
 public class AnnouncementManagement
 {
-    public static void AddAnnouncemnt ()
+    public static void AddAnnouncement ()
     {
         using var context = new FindRooMateContext();
 
@@ -72,7 +72,7 @@ public class AnnouncementManagement
         _ = context.SaveChanges();
     }
 
-    public static void TerminateAnnouncemnt ()
+    public static void TerminateAnnouncement ()
     {
         using var context = new FindRooMateContext();
 
@@ -112,6 +112,58 @@ public class AnnouncementManagement
         existingAnnouncement.IsActive = false;
 
         Console.WriteLine($"Announcements {existingAnnouncement.Id}, terminated.");
+
+        // Save changes
+        _ = context.SaveChanges();
+    }
+
+    public static void EditAnnouncement ()
+    {
+        // Work with dormitory context
+        using var context = new FindRooMateContext();
+
+        // Get all active announcements
+        var activeAnnouncements = context.Announcements
+            .Where(x => x.IsActive == true)
+            .ToList();
+
+        // Show active announcements
+        Console.WriteLine("List of active announcements:");
+        foreach (var activeAnnouncement in activeAnnouncements)
+        {
+            Console.WriteLine($"Id: {activeAnnouncement.Id}, Title: {activeAnnouncement.Title}, " +
+                $"Description: {activeAnnouncement.Description}");
+        }
+
+        // Get announcement Id from user
+        Console.WriteLine("Enter announcement Id:");
+        _ = int.TryParse(Console.ReadLine(), out var announcementId);
+
+        // Get announcement by Id
+        var announcement = activeAnnouncements.FirstOrDefault(x => x.Id == announcementId);
+
+        // Validate Announcement
+        if (announcement == null)
+        {
+            Console.WriteLine($"Announcement with Id {announcementId} does not exist.");
+            return;
+        }
+
+        // Get new title from user
+        Console.WriteLine("Enter new title:");
+        var newTitle = Console.ReadLine();
+
+        // Get new description from user
+        Console.WriteLine("Enter new description:");
+        var newDescription = Console.ReadLine();
+
+        // Update announcement title if new title is not null or empty
+        announcement.Title = string.IsNullOrEmpty(newTitle) ? announcement.Title : newTitle;
+
+        // Update announcement description if new description is not null or empty
+        announcement.Description = string.IsNullOrEmpty(newDescription) ? announcement.Description : newDescription;
+
+        Console.WriteLine($"Announcement {announcement.Id}, updated!");
 
         // Save changes
         _ = context.SaveChanges();
