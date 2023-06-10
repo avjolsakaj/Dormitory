@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dormitory", "Dormitory.csproj", "{D4F22961-8298-4B1D-BB3F-E8C5ADF92636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dormitory", "Dormitory.csproj", "{D4F22961-8298-4B1D-BB3F-E8C5ADF92636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "..\API\API.csproj", "{AE2B00CD-5969-41C1-A7A4-FA57256E032E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D4F22961-8298-4B1D-BB3F-E8C5ADF92636}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4F22961-8298-4B1D-BB3F-E8C5ADF92636}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4F22961-8298-4B1D-BB3F-E8C5ADF92636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE2B00CD-5969-41C1-A7A4-FA57256E032E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2B00CD-5969-41C1-A7A4-FA57256E032E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2B00CD-5969-41C1-A7A4-FA57256E032E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2B00CD-5969-41C1-A7A4-FA57256E032E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
