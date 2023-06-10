@@ -1,4 +1,5 @@
-﻿using API.DAL;
+﻿using API.Converters;
+using API.DAL;
 using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,16 +22,18 @@ public class AnnouncementsController : ControllerBase
     /// </summary>
     /// <returns>List of Announcements</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Announcement>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AnnouncementDTO>))]
     public async Task<IActionResult> Get ()
     {
         var listOfAnnouncements = await _context.Announcements
+            .Include(a => a.Room)
             .Where(a => a.IsActive == true)
             .ToListAsync();
 
-        // TODO: Convert into DTO
+        // Convert into DTO
+        var result = listOfAnnouncements.ConvertAll(x => x.Map());
 
-        return Ok(listOfAnnouncements);
+        return Ok(result);
     }
 
     /// <summary>
@@ -39,11 +42,12 @@ public class AnnouncementsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>Announcement</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Announcement))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AnnouncementDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     public async Task<IActionResult> Get (int id)
     {
         var announcement = await _context.Announcements
+            .Include(a => a.Room)
             .FirstOrDefaultAsync(a => a.IsActive == true && a.Id == id);
 
         if (announcement == null)
@@ -51,7 +55,10 @@ public class AnnouncementsController : ControllerBase
             return NotFound($"Announcement {id} not found!");
         }
 
-        return Ok(announcement);
+        // Convert into DTO
+        var result = announcement.Map();
+
+        return Ok(result);
     }
 
     /// <summary>
@@ -60,7 +67,7 @@ public class AnnouncementsController : ControllerBase
     /// <param name="request"></param>
     /// <returns>Created Announcement</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Announcement))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(AnnouncementDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Post ([FromBody] CreateAnnouncementDTO request)
     {
@@ -105,9 +112,10 @@ public class AnnouncementsController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        // TODO: Convert into DTO
+        // Convert into DTO
+        var result = created.Entity.Map();
 
-        return Created(nameof(Get), created.Entity);
+        return Created(nameof(Get), result);
     }
 
     /// <summary>
@@ -117,7 +125,7 @@ public class AnnouncementsController : ControllerBase
     /// <param name="request"></param>
     /// <returns>Updated announcement</returns>
     [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Announcement))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AnnouncementDTO))]
     public async Task<IActionResult> Put (int id, [FromBody] UpdateAnnouncementDTO request)
     {
         if (string.IsNullOrEmpty(request.Title))
@@ -146,8 +154,11 @@ public class AnnouncementsController : ControllerBase
         // Save database
         await _context.SaveChangesAsync();
 
+        // Convert into DTO
+        var result = announcement.Map();
+
         // Return updated announcement
-        return Ok(announcement);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]

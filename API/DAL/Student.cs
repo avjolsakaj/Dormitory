@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API.DAL;
+﻿namespace API.DAL;
 
 public partial class Student
 {
