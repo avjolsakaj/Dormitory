@@ -20,7 +20,7 @@ public class RoomsController : ControllerBase
     /// Endpoint: Get list of rooms
     /// </summary>
     /// <returns>Get list of rooms</returns>
-    [HttpGet("list")]
+    [HttpGet]
     public async Task<IActionResult> Get ()
     {
         var listOfRooms = await _context.Rooms.ToListAsync();

@@ -21,6 +21,7 @@ public class AnnouncementsController : ControllerBase
     /// </summary>
     /// <returns>List of Announcements</returns>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Announcement>))]
     public async Task<IActionResult> Get ()
     {
         var listOfAnnouncements = await _context.Announcements
@@ -32,14 +33,35 @@ public class AnnouncementsController : ControllerBase
         return Ok(listOfAnnouncements);
     }
 
-    // GET api/<AnnouncementsController>/5
+    /// <summary>
+    /// Get announcement by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Announcement</returns>
     [HttpGet("{id}")]
-    public string Get (int id)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Announcement))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
+    public async Task<IActionResult> Get (int id)
     {
-        return "value";
+        var announcement = await _context.Announcements
+            .FirstOrDefaultAsync(a => a.IsActive == true && a.Id == id);
+
+        if (announcement == null)
+        {
+            return NotFound($"Announcement {id} not found!");
+        }
+
+        return Ok(announcement);
     }
 
+    /// <summary>
+    /// Create an announcement
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>Created Announcement</returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Announcement))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public async Task<IActionResult> Post ([FromBody] CreateAnnouncementDTO request)
     {
         if (string.IsNullOrEmpty(request.Title))
@@ -85,18 +107,69 @@ public class AnnouncementsController : ControllerBase
 
         // TODO: Convert into DTO
 
-        return Ok(created.Entity);
+        return Created(nameof(Get), created.Entity);
     }
 
-    // PUT api/<AnnouncementsController>/5
+    /// <summary>
+    /// Update announcement by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns>Updated announcement</returns>
     [HttpPut("{id}")]
-    public void Put (int id, [FromBody] string value)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Announcement))]
+    public async Task<IActionResult> Put (int id, [FromBody] UpdateAnnouncementDTO request)
     {
+        if (string.IsNullOrEmpty(request.Title))
+        {
+            return BadRequest("Title is required!");
+        }
+
+        if (string.IsNullOrEmpty(request.Description))
+        {
+            return BadRequest("Description is required!");
+        }
+
+        // Get announcement in database
+        var announcement = await _context.Announcements
+            .FirstOrDefaultAsync(a => a.IsActive == true && a.Id == id);
+
+        if (announcement == null)
+        {
+            return BadRequest($"Announcement {id} doesn't exist!");
+        }
+
+        // Update announcement
+        announcement.Title = request.Title;
+        announcement.Description = request.Description;
+
+        // Save database
+        await _context.SaveChangesAsync();
+
+        // Return updated announcement
+        return Ok(announcement);
     }
 
-    // DELETE api/<AnnouncementsController>/5
     [HttpDelete("{id}")]
-    public void Delete (int id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete (int id)
     {
+        // Get announcement by Id and isActive == true
+        var existingAnnouncement = await _context.Announcements
+            .FirstOrDefaultAsync(x => x.Id == id && x.IsActive == true);
+
+        // If announcement does not exist, return
+        if (existingAnnouncement == null)
+        {
+            return NoContent();
+        }
+
+        // Set isActive to false
+        existingAnnouncement.IsActive = false;
+
+        // Save changes
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }
