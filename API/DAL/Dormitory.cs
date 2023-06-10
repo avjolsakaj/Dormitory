@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace API.DAL;
 
-namespace API.DAL
+public partial class Dormitory
 {
-    public partial class Dormitory
+    public Dormitory ()
     {
-        public Dormitory ()
-        {
-            Rooms = new HashSet<Room>();
-        }
-
-        public int Id { get; set; }
-        public string Code { get; set; } = null!;
-        public string Name { get; set; } = null!;
-        public int MaxCapacity { get; set; }
-
-        public virtual ICollection<Room> Rooms { get; set; }
+        Rooms = new HashSet<Room>();
     }
+
+    public int Id { get; set; }
+    public string Code { get; set; } = null!;
+    public string Name { get; set; } = null!;
+    public int MaxCapacity { get; set; }
+
+    public virtual ICollection<Room> Rooms { get; set; }
 }

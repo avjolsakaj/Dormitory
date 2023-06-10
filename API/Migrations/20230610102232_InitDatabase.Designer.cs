@@ -9,278 +9,277 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace API.Migrations
+namespace API.Migrations;
+
+[DbContext(typeof(RestApiDormitoryContext))]
+[Migration("20230610102232_InitDatabase")]
+partial class InitDatabase
 {
-    [DbContext(typeof(RestApiDormitoryContext))]
-    [Migration("20230610102232_InitDatabase")]
-    partial class InitDatabase
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+        modelBuilder
+            .HasAnnotation("ProductVersion", "6.0.16")
+            .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+        SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("API.DAL.Announcement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.Announcement", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((1))");
+                b.Property<bool?>("IsActive")
+                    .IsRequired()
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bit")
+                    .HasDefaultValueSql("((1))");
 
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime");
+                b.Property<DateTime>("PublishedDate")
+                    .HasColumnType("datetime");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
+                b.Property<int>("RoomId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                b.HasIndex("RoomId");
 
-                    b.ToTable("Announcements");
-                });
+                b.ToTable("Announcements");
+            });
 
-            modelBuilder.Entity("API.DAL.Application", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.Application", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AnnouncementId")
-                        .HasColumnType("int");
+                b.Property<int>("AnnouncementId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("ApplicationDate")
-                        .HasColumnType("datetime");
+                b.Property<DateTime>("ApplicationDate")
+                    .HasColumnType("datetime");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((1))");
+                b.Property<bool?>("IsActive")
+                    .IsRequired()
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bit")
+                    .HasDefaultValueSql("((1))");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                b.Property<int>("StudentId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex(new[] { "AnnouncementId" }, "IX_Applications_AnnouncementId");
+                b.HasIndex(new[] { "AnnouncementId" }, "IX_Applications_AnnouncementId");
 
-                    b.HasIndex(new[] { "StudentId" }, "IX_Applications_StudentId");
+                b.HasIndex(new[] { "StudentId" }, "IX_Applications_StudentId");
 
-                    b.ToTable("Applications");
-                });
+                b.ToTable("Applications");
+            });
 
-            modelBuilder.Entity("API.DAL.Dormitory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.Dormitory", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                b.Property<string>("Code")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("MaxCapacity")
-                        .HasColumnType("int");
+                b.Property<int>("MaxCapacity")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Dormitories");
-                });
+                b.ToTable("Dormitories");
+            });
 
-            modelBuilder.Entity("API.DAL.Room", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.Room", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
+                b.Property<int>("Capacity")
+                    .HasColumnType("int");
 
-                    b.Property<int>("DormitoryId")
-                        .HasColumnType("int");
+                b.Property<int>("DormitoryId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex(new[] { "DormitoryId" }, "IX_Rooms_DormitoryId");
+                b.HasIndex(new[] { "DormitoryId" }, "IX_Rooms_DormitoryId");
 
-                    b.ToTable("Rooms");
-                });
+                b.ToTable("Rooms");
+            });
 
-            modelBuilder.Entity("API.DAL.RoomStudent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.RoomStudent", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("date");
+                b.Property<DateTime?>("EndDate")
+                    .HasColumnType("date");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
+                b.Property<int>("RoomId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("date");
+                b.Property<DateTime>("StartDate")
+                    .HasColumnType("date");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                b.Property<int>("StudentId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex(new[] { "RoomId" }, "IX_RoomStudent_RoomId");
+                b.HasIndex(new[] { "RoomId" }, "IX_RoomStudent_RoomId");
 
-                    b.HasIndex(new[] { "StudentId" }, "IX_RoomStudent_StudentId");
+                b.HasIndex(new[] { "StudentId" }, "IX_RoomStudent_StudentId");
 
-                    b.ToTable("RoomStudent", (string)null);
-                });
+                b.ToTable("RoomStudent", (string)null);
+            });
 
-            modelBuilder.Entity("API.DAL.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+        modelBuilder.Entity("API.DAL.Student", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Surname")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Students");
-                });
+                b.ToTable("Students");
+            });
 
-            modelBuilder.Entity("API.DAL.Announcement", b =>
-                {
-                    b.HasOne("API.DAL.Room", "Room")
-                        .WithMany("Announcements")
-                        .HasForeignKey("RoomId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Rooms_Announcement");
+        modelBuilder.Entity("API.DAL.Announcement", b =>
+            {
+                b.HasOne("API.DAL.Room", "Room")
+                    .WithMany("Announcements")
+                    .HasForeignKey("RoomId")
+                    .IsRequired()
+                    .HasConstraintName("FK_Rooms_Announcement");
 
-                    b.Navigation("Room");
-                });
+                b.Navigation("Room");
+            });
 
-            modelBuilder.Entity("API.DAL.Application", b =>
-                {
-                    b.HasOne("API.DAL.Announcement", "Announcement")
-                        .WithMany("Applications")
-                        .HasForeignKey("AnnouncementId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Applications_Announcements");
+        modelBuilder.Entity("API.DAL.Application", b =>
+            {
+                b.HasOne("API.DAL.Announcement", "Announcement")
+                    .WithMany("Applications")
+                    .HasForeignKey("AnnouncementId")
+                    .IsRequired()
+                    .HasConstraintName("FK_Applications_Announcements");
 
-                    b.HasOne("API.DAL.Student", "Student")
-                        .WithMany("Applications")
-                        .HasForeignKey("StudentId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Applications_Students");
+                b.HasOne("API.DAL.Student", "Student")
+                    .WithMany("Applications")
+                    .HasForeignKey("StudentId")
+                    .IsRequired()
+                    .HasConstraintName("FK_Applications_Students");
 
-                    b.Navigation("Announcement");
+                b.Navigation("Announcement");
 
-                    b.Navigation("Student");
-                });
+                b.Navigation("Student");
+            });
 
-            modelBuilder.Entity("API.DAL.Room", b =>
-                {
-                    b.HasOne("API.DAL.Dormitory", "Dormitory")
-                        .WithMany("Rooms")
-                        .HasForeignKey("DormitoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Rooms_Dormitories");
+        modelBuilder.Entity("API.DAL.Room", b =>
+            {
+                b.HasOne("API.DAL.Dormitory", "Dormitory")
+                    .WithMany("Rooms")
+                    .HasForeignKey("DormitoryId")
+                    .IsRequired()
+                    .HasConstraintName("FK_Rooms_Dormitories");
 
-                    b.Navigation("Dormitory");
-                });
+                b.Navigation("Dormitory");
+            });
 
-            modelBuilder.Entity("API.DAL.RoomStudent", b =>
-                {
-                    b.HasOne("API.DAL.Room", "Room")
-                        .WithMany("RoomStudents")
-                        .HasForeignKey("RoomId")
-                        .IsRequired()
-                        .HasConstraintName("FK_RoomStudent_Rooms");
+        modelBuilder.Entity("API.DAL.RoomStudent", b =>
+            {
+                b.HasOne("API.DAL.Room", "Room")
+                    .WithMany("RoomStudents")
+                    .HasForeignKey("RoomId")
+                    .IsRequired()
+                    .HasConstraintName("FK_RoomStudent_Rooms");
 
-                    b.HasOne("API.DAL.Student", "Student")
-                        .WithMany("RoomStudents")
-                        .HasForeignKey("StudentId")
-                        .IsRequired()
-                        .HasConstraintName("FK_RoomStudent_Students");
+                b.HasOne("API.DAL.Student", "Student")
+                    .WithMany("RoomStudents")
+                    .HasForeignKey("StudentId")
+                    .IsRequired()
+                    .HasConstraintName("FK_RoomStudent_Students");
 
-                    b.Navigation("Room");
+                b.Navigation("Room");
 
-                    b.Navigation("Student");
-                });
+                b.Navigation("Student");
+            });
 
-            modelBuilder.Entity("API.DAL.Announcement", b =>
-                {
-                    b.Navigation("Applications");
-                });
+        modelBuilder.Entity("API.DAL.Announcement", b =>
+            {
+                b.Navigation("Applications");
+            });
 
-            modelBuilder.Entity("API.DAL.Dormitory", b =>
-                {
-                    b.Navigation("Rooms");
-                });
+        modelBuilder.Entity("API.DAL.Dormitory", b =>
+            {
+                b.Navigation("Rooms");
+            });
 
-            modelBuilder.Entity("API.DAL.Room", b =>
-                {
-                    b.Navigation("Announcements");
+        modelBuilder.Entity("API.DAL.Room", b =>
+            {
+                b.Navigation("Announcements");
 
-                    b.Navigation("RoomStudents");
-                });
+                b.Navigation("RoomStudents");
+            });
 
-            modelBuilder.Entity("API.DAL.Student", b =>
-                {
-                    b.Navigation("Applications");
+        modelBuilder.Entity("API.DAL.Student", b =>
+            {
+                b.Navigation("Applications");
 
-                    b.Navigation("RoomStudents");
-                });
+                b.Navigation("RoomStudents");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }
